@@ -1,0 +1,28 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: Torben Vesterager
+  Date: 22-11-2010
+  Time: 13:28:26
+-->
+<taglib xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+    <tlib-version>1.0</tlib-version>
+    <short-name>utils</short-name>
+    <uri>http://konzoomer.com/jsp/utils</uri>
+    <function>
+        <name>contains</name>
+        <function-class>com.konzoomer.Utils</function-class>
+        <function-signature>boolean contains(java.util.Collection, java.lang.Object)</function-signature>
+    </function>
+    <function>
+        <name>getTime</name>
+        <function-class>com.konzoomer.Utils</function-class>
+        <function-signature>java.lang.String getTime(java.lang.Integer)</function-signature>
+    </function>
+    <function>
+        <name>getStoreCountInChain</name>
+        <function-class>com.konzoomer.Utils</function-class>
+        <function-signature>java.lang.Integer getStoreCountInChain(java.lang.Long)</function-signature>
+    </function>
+</taglib>

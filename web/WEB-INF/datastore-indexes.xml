@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes autoGenerate="true">
+    <datastore-index kind="Store" ancestor="false">
+        <property name="chainID" direction="asc"/>
+        <property name="streetName" direction="asc"/>
+        <property name="streetBuildingIdentifier" direction="asc"/>
+        <property name="postCodeIdentifier" direction="asc"/>
+        <property name="districtName" direction="asc"/>
+        <property name="districtSubDivisionIdentifier" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="Offer" ancestor="false" source="manual">
+        <property name="end" direction="asc"/>
+        <property name="category" direction="asc"/>
+    </datastore-index>
+</datastore-indexes>

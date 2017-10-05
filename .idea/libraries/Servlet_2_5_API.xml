@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Servlet 2.5 API">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../servlet-2.5-api.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

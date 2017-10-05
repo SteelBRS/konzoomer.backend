@@ -1,0 +1,83 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: Torben Vesterager
+  Date: 18-11-2010
+  Time: 11:37:57
+-->
+<jsp:root
+        xmlns:jsp="http://java.sun.com/JSP/Page"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+        xmlns="http://www.w3.org/1999/xhtml"
+        version="2.0">
+    <jsp:output omit-xml-declaration="no"/>
+    <jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></jsp:text>
+    <jsp:directive.page import="java.util.List"/>
+    <jsp:directive.page import="javax.jdo.PersistenceManager"/>
+    <jsp:directive.page import="com.konzoomer.domain.Brand"/>
+    <jsp:directive.page import="com.konzoomer.repo.PMF"/>
+    <jsp:directive.page contentType="text/html;charset=utf-8" pageEncoding="UTF-8"/>
+    <jsp:directive.page isELIgnored="false"/>
+    <jsp:useBean id="brand" class="com.konzoomer.domain.Brand" scope="request"/>
+    <jsp:scriptlet>
+        try {
+            Long id = Long.parseLong(request.getParameter("id"));
+            PersistenceManager pm = PMF.get().getPersistenceManager();
+            brand = pm.getObjectById(Brand.class, id);
+        } catch (NumberFormatException e) {
+            brand = new Brand();
+        }
+        request.setAttribute("brand", brand);
+    </jsp:scriptlet>
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    <head><title>Rediger varemærke</title></head>
+    <body>
+    <p>Rediger varemærke</p>
+
+    <form id="brandForm" action="/admin/saveBrand" method="post">
+        <table>
+            <tr>
+                <td><label for="id">id:</label></td>
+                <td><input id="id" name="id" type="text" value="${brand.id}"/></td>
+                <td>
+                    <button type="button" onclick="window.location='/admin/editBrand?id='+document.getElementById('id').value">Load</button>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="name">name:</label></td>
+                <td><input id="name" name="name" type="text" value="${brand.name}"/></td>
+            </tr>
+            <tr>
+                <td><label for="rating">rating:</label></td>
+                <td><input id="rating" name="rating" type="text" value="${brand.rating}"/></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Save Brand"/></td>
+            </tr>
+        </table>
+    </form>
+
+    <jsp:useBean id="brandMap" class="java.util.TreeMap" type="java.util.Map" scope="request"/>
+    <jsp:scriptlet>
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        List brands = (List) pm.newQuery(Brand.class).execute();
+        for (Object brandInList : brands)
+            brandMap.put(((Brand) brandInList).getName(), brandInList);
+
+        request.setAttribute("brandMap", brandMap);
+    </jsp:scriptlet>
+    <table style="position:absolute;right:0;">
+        <tr>
+            <td colspan="3">Varemærke:</td>
+        </tr>
+        <c:forEach var="brandMapEntry" items="${brandMap}">
+            <tr>
+                <td>${brandMapEntry.value.id}</td>
+                <td><a href="/admin/editBrand?id=${brandMapEntry.value.id}">${brandMapEntry.value.name}</a></td>
+                <td>${brandMapEntry.value.rating}</td>
+            </tr>
+        </c:forEach>
+    </table>
+    </body>
+    </html>
+</jsp:root>

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="JSTL 1.1.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../appengine-java-sdk-1.4.0/lib/tools/jsp/repackaged-appengine-jakarta-jstl-1.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../appengine-java-sdk-1.4.0/lib/tools/jsp/repackaged-appengine-jakarta-standard-1.1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

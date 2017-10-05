@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="web" name="Web">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/web/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/web" relative="/" />
+        </webroots>
+        <context-artifact name="konzoomer.backend:war exploded" />
+      </configuration>
+      <facet type="google-app-engine" name="Google App Engine">
+        <configuration>
+          <password>dfcedfcfdfdedfcfdfd8dfc7dfc3dfcddf98</password>
+          <files-to-enhance>
+            <file path="$MODULE_DIR$/src/com/konzoomer/domain" />
+          </files-to-enhance>
+          <run-enhancer-on-make>true</run-enhancer-on-make>
+          <sdk-home-path>$MODULE_DIR$/../appengine-java-sdk-1.4.0</sdk-home-path>
+          <email>vesterager@gmail.com</email>
+        </configuration>
+      </facet>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="AppEngine API" level="project" />
+    <orderEntry type="library" name="AppEngine ORM" level="project" />
+    <orderEntry type="library" name="Servlet 2.5 API" level="project" />
+    <orderEntry type="library" exported="" name="Apache Commons" level="project" />
+    <orderEntry type="library" name="JSTL 1.1.2" level="project" />
+  </component>
+</module>
+

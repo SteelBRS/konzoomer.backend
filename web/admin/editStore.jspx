@@ -1,0 +1,199 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: Torben Vesterager
+  Date: 20-12-2010
+  Time: 11:57:42
+-->
+<jsp:root
+        xmlns:utils="http://konzoomer.com/jsp/utils"
+        xmlns:jsp="http://java.sun.com/JSP/Page"
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+        xmlns="http://www.w3.org/1999/xhtml"
+        version="2.0">
+    <jsp:output omit-xml-declaration="no"/>
+    <jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></jsp:text>
+    <jsp:directive.page import="java.util.logging.Logger"/>
+    <jsp:directive.page import="javax.jdo.PersistenceManager"/>
+    <jsp:directive.page import="com.konzoomer.domain.Chain"/>
+    <jsp:directive.page import="com.konzoomer.domain.Store"/>
+    <jsp:directive.page import="com.konzoomer.repo.PMF"/>
+    <jsp:directive.page import="com.konzoomer.Utils"/>
+    <jsp:directive.page contentType="text/html;charset=utf-8" pageEncoding="UTF-8"/>
+    <jsp:directive.page isELIgnored="false"/>
+    <jsp:useBean id="store" class="com.konzoomer.domain.Store" scope="request"/>
+    <jsp:scriptlet>
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        try {
+            Long id = Long.parseLong(request.getParameter("id"));
+            store = pm.getObjectById(Store.class, id);
+        } catch (NumberFormatException e) {
+            store = new Store();
+        }
+
+        Logger log = Logger.getLogger(page.getClass().getName());
+
+        request.setAttribute("store", store);
+        request.setAttribute("chains", pm.newQuery(Chain.class).execute());
+        request.setAttribute("lastTouched", Utils.getDateTime(store.getLastTouched()));
+    </jsp:scriptlet>
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    <head><title>Rediger Butik</title></head>
+    <body>
+    <p>Rediger Butik</p>
+
+    <form id="storeForm" action="/admin/saveStore" method="post">
+        <table>
+            <tr>
+                <td><label for="id">id:</label></td>
+                <td><input id="id" name="id" type="text" value="${store.id}"/></td>
+                <td>
+                    <button type="button"
+                            onclick="window.location='/admin/editStore?id='+document.getElementById('id').value">Load
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>lastTouched:</td>
+                <td>${lastTouched}</td>
+            </tr>
+            <tr>
+                <td><label for="chain">chain:</label></td>
+                <td><select id="chain" name="chainID">
+                    <c:forEach var="chain" items="${chains}">
+                        <c:if test="${chain.hasStores}">
+                            <c:choose>
+                                <c:when test="${store.chainID == chain.id}">
+                                    <option value="${chain.id}" selected="selected">${chain.name}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${chain.id}">${chain.name}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:if>
+                    </c:forEach>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label for="name">name:</label></td>
+                <td><input id="name" name="name" type="text" value="${store.name}"/></td>
+            </tr>
+            <tr>
+                <td><label for="streetName">streetName:</label></td>
+                <td><input id="streetName" name="streetName" type="text" value="${store.streetName}"/></td>
+            </tr>
+            <tr>
+                <td><label for="streetBuildingIdentifier">streetBuildingIdentifier:</label></td>
+                <td><input id="streetBuildingIdentifier" name="streetBuildingIdentifier" type="text" value="${store.streetBuildingIdentifier}"/></td>
+            </tr>
+            <tr>
+                <td><label for="postCodeIdentifier">postCodeIdentifier:</label></td>
+                <td><input id="postCodeIdentifier" name="postCodeIdentifier" type="text" value="${store.postCodeIdentifier}"/></td>
+            </tr>
+            <tr>
+                <td><label for="districtName">districtName:</label></td>
+                <td><input id="districtName" name="districtName" type="text" value="${store.districtName}"/></td>
+            </tr>
+            <tr>
+                <td><label for="districtSubDivisionIdentifier">districtSubDivisionIdentifier:</label></td>
+                <td><input id="districtSubDivisionIdentifier" name="districtSubDivisionIdentifier" type="text" value="${store.districtSubDivisionIdentifier}"/></td>
+            </tr>
+            <tr>
+                <td><label for="contactPerson">contactPerson:</label></td>
+                <td><input id="contactPerson" name="contactPerson" type="text" value="${store.contactPerson}"/></td>
+            </tr>
+            <tr>
+                <td><label for="telephone">telephone:</label></td>
+                <td><input id="telephone" name="telephone" type="text" value="${store.telephone}"/></td>
+            </tr>
+            <tr>
+                <td><label for="telefax">telefax:</label></td>
+                <td><input id="telefax" name="telefax" type="text" value="${store.telefax}"/></td>
+            </tr>
+            <tr>
+                <td><label for="email">email:</label></td>
+                <td><input id="email" name="email" type="text" value="${store.email}"/></td>
+            </tr>
+            <tr>
+                <td><label for="website">website:</label></td>
+                <td><input id="website" name="website" type="text" value="${store.website}"/></td>
+            </tr>
+            <tr>
+                <td><label for="latitude">latitude:</label></td>
+                <td><input id="latitude" name="latitude" type="text" value="${store.latitude}"/></td>
+            </tr>
+            <tr>
+                <td><label for="longitude">longitude:</label></td>
+                <td><input id="longitude" name="longitude" type="text" value="${store.longitude}"/></td>
+            </tr>
+            <tr>
+                <td><label for="mondayOpen">mondayOpen:</label></td>
+                <td><input id="mondayOpen" name="mondayOpen" type="text" value="${utils:getTime(store.mondayOpen)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="mondayClose">mondayClose:</label></td>
+                <td><input id="mondayClose" name="mondayClose" type="text" value="${utils:getTime(store.mondayClose)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="tuesdayOpen">tuesdayOpen:</label></td>
+                <td><input id="tuesdayOpen" name="tuesdayOpen" type="text" value="${utils:getTime(store.tuesdayOpen)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="tuesdayClose">tuesdayClose:</label></td>
+                <td><input id="tuesdayClose" name="tuesdayClose" type="text" value="${utils:getTime(store.tuesdayClose)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="wednesdayOpen">wednesdayOpen:</label></td>
+                <td><input id="wednesdayOpen" name="wednesdayOpen" type="text" value="${utils:getTime(store.wednesdayOpen)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="wednesdayClose">wednesdayClose:</label></td>
+                <td><input id="wednesdayClose" name="wednesdayClose" type="text" value="${utils:getTime(store.wednesdayClose)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="thursdayOpen">thursdayOpen:</label></td>
+                <td><input id="thursdayOpen" name="thursdayOpen" type="text" value="${utils:getTime(store.thursdayOpen)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="thursdayClose">thursdayClose:</label></td>
+                <td><input id="thursdayClose" name="thursdayClose" type="text" value="${utils:getTime(store.thursdayClose)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="fridayOpen">fridayOpen:</label></td>
+                <td><input id="fridayOpen" name="fridayOpen" type="text" value="${utils:getTime(store.fridayOpen)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="fridayClose">fridayClose:</label></td>
+                <td><input id="fridayClose" name="fridayClose" type="text" value="${utils:getTime(store.fridayClose)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="saturdayOpen">saturdayOpen:</label></td>
+                <td><input id="saturdayOpen" name="saturdayOpen" type="text" value="${utils:getTime(store.saturdayOpen)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="saturdayClose">saturdayClose:</label></td>
+                <td><input id="saturdayClose" name="saturdayClose" type="text" value="${utils:getTime(store.saturdayClose)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="sundayOpen">sundayOpen:</label></td>
+                <td><input id="sundayOpen" name="sundayOpen" type="text" value="${utils:getTime(store.sundayOpen)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="sundayClose">sundayClose:</label></td>
+                <td><input id="sundayClose" name="sundayClose" type="text" value="${utils:getTime(store.sundayClose)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="firstAndLastSundayInMonthOpen">firstAndLastSundayInMonthOpen:</label></td>
+                <td><input id="firstAndLastSundayInMonthOpen" name="firstAndLastSundayInMonthOpen" type="text" value="${utils:getTime(store.firstAndLastSundayInMonthOpen)}"/></td>
+            </tr>
+            <tr>
+                <td><label for="firstAndLastSundayInMonthClose">firstAndLastSundayInMonthClose:</label></td>
+                <td><input id="firstAndLastSundayInMonthClose" name="firstAndLastSundayInMonthClose" type="text" value="${utils:getTime(store.firstAndLastSundayInMonthClose)}"/></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Save Store"/></td>
+            </tr>
+        </table>
+    </form>
+    </body>
+    </html>
+</jsp:root>

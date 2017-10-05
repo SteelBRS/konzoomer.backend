@@ -1,0 +1,106 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: Torben Vesterager
+  Date: 06-11-2010
+  Time: 12:57:42
+-->
+<jsp:root
+        xmlns:utils="http://konzoomer.com/jsp/utils"
+        xmlns:jsp="http://java.sun.com/JSP/Page"
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+        xmlns="http://www.w3.org/1999/xhtml"
+        version="2.0">
+    <jsp:output omit-xml-declaration="no"/>
+    <jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></jsp:text>
+    <jsp:directive.page import="java.util.List"/>
+    <jsp:directive.page import="java.util.TreeMap"/>
+    <jsp:directive.page import="javax.jdo.PersistenceManager"/>
+    <jsp:directive.page import="com.konzoomer.domain.Chain"/>
+    <jsp:directive.page import="com.konzoomer.repo.PMF"/>
+    <jsp:directive.page contentType="text/html;charset=utf-8" pageEncoding="UTF-8"/>
+    <jsp:directive.page isELIgnored="false"/>
+    <jsp:useBean id="chain" class="com.konzoomer.domain.Chain" scope="request"/>
+    <jsp:scriptlet>
+        try {
+            Long id = Long.parseLong(request.getParameter("id"));
+            PersistenceManager pm = PMF.get().getPersistenceManager();
+            chain = pm.getObjectById(Chain.class, id);
+        } catch (NumberFormatException e) {
+            chain = new Chain();
+        }
+        request.setAttribute("chain", chain);
+    </jsp:scriptlet>
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    <head><title>Rediger kæde</title></head>
+    <body>
+    <p>Rediger kæde</p>
+
+    <form id="chainForm" action="/admin/saveChain" method="post">
+        <table>
+            <tr>
+                <td><label for="id">id:</label></td>
+                <td><input id="id" name="id" type="text" value="${chain.id}"/></td>
+                <td>
+                    <button type="button" onclick="window.location='/admin/editChain?id='+document.getElementById('id').value">Load</button>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="motherChainID">motherChainID:</label></td>
+                <td><input id="motherChainID" name="motherChainID" type="text" value="${chain.motherChainID}"/></td>
+            </tr>
+            <tr>
+                <td><label for="name">name:</label></td>
+                <td><input id="name" name="name" type="text" value="${chain.name}"/></td>
+            </tr>
+            <tr>
+                <td><label for="hasStores">hasStores:</label></td>
+                <td>
+                    <c:choose>
+                        <c:when test="${chain.hasStores}"><input id="hasStores" name="hasStores" type="checkbox" value="true" checked="checked"/></c:when>
+                        <c:otherwise><input id="hasStores" name="hasStores" type="checkbox" value="true"/></c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="country">country:</label></td>
+                <td><input id="country" name="country" type="text" value="${chain.country}"/></td>
+            </tr>
+            <tr>
+                <td><label for="currency">currency:</label></td>
+                <td><input id="currency" name="currency" type="text" value="${chain.currency}"/></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Save Chain"/></td>
+            </tr>
+        </table>
+    </form>
+
+    <jsp:scriptlet>
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        List&lt;Chain> chains = (List&lt;Chain>) pm.newQuery(Chain.class).execute();
+        TreeMap&lt;Long, Chain> chainMap = new TreeMap&lt;Long, Chain>();
+        for (Chain chainInList : chains)
+            chainMap.put(chainInList.getId(), chainInList);
+
+        request.setAttribute("chainMap", chainMap);
+        request.setAttribute("chainMapKeySet", chainMap.keySet());
+    </jsp:scriptlet>
+    <table style="position:absolute;right:0;">
+        <tr>
+            <td colspan="2">Kæde:</td>
+            <td>Moderkæde:</td>
+        </tr>
+        <c:forEach var="chainMapEntry" items="${chainMap}">
+            <tr>
+                <td>${chainMapEntry.value.id}</td>
+                <td><a href="/admin/editChain?id=${chainMapEntry.value.id}">${chainMapEntry.value.name}</a> (${utils:getStoreCountInChain(chainMapEntry.value.id)})</td>
+                <td><c:if test="${utils:contains(chainMapKeySet, chainMapEntry.value.motherChainID)}">
+                    <a href="/admin/editChain?id=${chainMap[chainMapEntry.value.motherChainID].id}">${chainMap[chainMapEntry.value.motherChainID].name}</a>
+                </c:if>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+    </body>
+    </html>
+</jsp:root>

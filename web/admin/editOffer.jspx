@@ -1,0 +1,232 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: Torben Vesterager
+  Date: 06-11-2010
+  Time: 12:57:42
+-->
+<jsp:root
+        xmlns:utils="http://konzoomer.com/jsp/utils"
+        xmlns:jsp="http://java.sun.com/JSP/Page"
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+        xmlns="http://www.w3.org/1999/xhtml"
+        version="2.0">
+    <jsp:output omit-xml-declaration="no"/>
+    <jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></jsp:text>
+    <jsp:directive.page import="java.util.HashMap"/>
+    <jsp:directive.page import="java.util.Map"/>
+    <jsp:directive.page import="java.util.List"/>
+    <jsp:directive.page import="java.util.TreeSet"/>
+    <jsp:directive.page import="java.util.logging.Logger"/>
+    <jsp:directive.page import="javax.jdo.PersistenceManager"/>
+    <jsp:directive.page import="com.konzoomer.domain.Brand"/>
+    <jsp:directive.page import="com.konzoomer.domain.Chain"/>
+    <jsp:directive.page import="com.konzoomer.domain.Offer"/>
+    <jsp:directive.page import="com.konzoomer.domain.Types"/>
+    <jsp:directive.page import="com.konzoomer.domain.Units"/>
+    <jsp:directive.page import="com.konzoomer.repo.PMF"/>
+    <jsp:directive.page import="com.konzoomer.Utils"/>
+    <jsp:directive.page contentType="text/html;charset=utf-8" pageEncoding="UTF-8"/>
+    <jsp:directive.page isELIgnored="false"/>
+    <jsp:useBean id="offer" class="com.konzoomer.domain.Offer" scope="request"/>
+    <jsp:useBean id="categoriesBean" class="com.konzoomer.domain.CategoriesBean" scope="application"/>
+    <jsp:useBean id="categories_da" class="java.util.Properties" scope="application"/>
+    <jsp:scriptlet>
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        try {
+            Long id = Long.parseLong(request.getParameter("id"));
+            offer = pm.getObjectById(Offer.class, id);
+        } catch (NumberFormatException e) {
+            offer = new Offer();
+        }
+
+        Logger log = Logger.getLogger(page.getClass().getName());
+
+        request.setAttribute("offer", offer);
+
+        request.setAttribute("offerStart", offer.getStart() == null ? "" : Utils.DATE_FORMAT.format(offer.getStart()));
+        request.setAttribute("offerEnd", offer.getEnd() == null ? "" : Utils.DATE_FORMAT.format(offer.getEnd()));
+
+        request.setAttribute("chains", pm.newQuery(Chain.class).execute());
+        request.setAttribute("brands", new TreeSet&lt;Brand>((List&lt;Brand>) pm.newQuery(Brand.class).execute()));
+
+        Map&lt;Byte, String> units = new HashMap&lt;Byte, String>();
+        units.put(Units.LITER, "Liter");
+        units.put(Units.CENTILITER, "Centiliter");
+        units.put(Units.MILLILITER, "Milliliter");
+        units.put(Units.GRAM, "Gram");
+        units.put(Units.PIECE, "Styk");
+        request.setAttribute("units", units);
+
+        Map&lt;Byte, String> types = new HashMap&lt;Byte, String>();
+        types.put(Types.PIECE, "Styk");
+        types.put(Types.PACKAGE, "Pakke(r)");
+        types.put(Types.BAG, "Pose(r)");
+        types.put(Types.GLASS, "Glas");
+        types.put(Types.CAN, "Dåse(r)");
+        types.put(Types.BOTTLE, "Flaske(r)");
+        types.put(Types.BOX, "Kasse(r)");
+        types.put(Types.HALF_KILOGRAM, "½ KG");
+        types.put(Types.TWO_PACK, "2-pakke(r)");
+        types.put(Types.THREE_PACK, "3-pakke(r)");
+        types.put(Types.FOUR_PACK, "4-pakke(r)");
+        request.setAttribute("types", types);
+
+    </jsp:scriptlet>
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    <head><title>Rediger Tilbud</title></head>
+    <body>
+    <p>Rediger Tilbud</p>
+
+    <form id="offerForm" enctype="multipart/form-data" action="/admin/saveOffer" method="post">
+        <table>
+            <tr>
+                <td><label for="id">id:</label></td>
+                <td><input id="id" name="id" type="text" value="${offer.id}"/></td>
+                <td>
+                    <button type="button" onclick="window.location='/admin/editOffer?id='+document.getElementById('id').value">Load</button>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="chain">chain:</label></td>
+                <td><select id="chain" name="chainID">
+                    <c:forEach var="chain" items="${chains}">
+                        <c:if test="${chain.hasStores}">
+                            <c:choose>
+                                <c:when test="${offer.chainID == chain.id}">
+                                    <option value="${chain.id}" selected="selected">${chain.name}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${chain.id}">${chain.name}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:if>
+                    </c:forEach>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label for="name">name:</label></td>
+                <td><input id="name" name="name" type="text" value="${offer.name}"/></td>
+            </tr>
+            <tr>
+                <td><label for="description">description:</label></td>
+                <td colspan="2"><input id="description" name="description" type="text" style="width:300px" value="${offer.description}"/></td>
+            </tr>
+            <tr>
+                <td><label for="image">image:</label></td>
+                <td colspan="2"><c:if test="${offer.id != null}"><img src="/offerImage?id=${offer.id}"
+                                                                      alt="offerImage" border="1"/><br/></c:if>
+                    <input id="image" name="image" type="file"/></td>
+            </tr>
+            <tr>
+                <td><label for="start">start:</label></td>
+                <td><input id="start" name="start" type="text" value="${offerStart}"/></td>
+            </tr>
+            <tr>
+                <td><label for="end">end:</label></td>
+                <td><input id="end" name="end" type="text" value="${offerEnd}"/></td>
+            </tr>
+            <tr>
+                <td><label for="brands">brands:</label></td>
+                <td><select id="brands" name="brands" multiple="multiple" size="20">
+                    <c:forEach var="brand" items="${brands}">
+                        <c:choose>
+                            <c:when test="${utils:contains(offer.brands, brand.id)}">
+                                <option value="${brand.id}" selected="selected">${brand.name}</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="${brand.id}">${brand.name}</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label for="category">category:</label></td>
+                <td><select id="category" name="category">
+                    <c:forEach var="category" items="${categoriesBean.categories}">
+                        <c:choose>
+                            <c:when test="${offer.category == category.id}">
+                                <option value="${category.id}" selected="selected">
+                                    <c:if test="${category.parentID != 0}">&amp;nbsp;&amp;middot;&amp;nbsp;</c:if><c:out value="${categories_da[category.nameKey]}" escapeXml="true"/>
+                                </option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="${category.id}">
+                                    <c:if test="${category.parentID != 0}">&amp;nbsp;&amp;middot;&amp;nbsp;</c:if><c:out value="${categories_da[category.nameKey]}" escapeXml="true"/>
+                                </option>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </select> category=${offer.category}</td>
+            </tr>
+            <tr>
+                <td><label for="totalQuantity">totalQuantity:</label></td>
+                <td><input id="totalQuantity" name="totalQuantity" type="text" maxlength="4" style="width:34px" value="${offer.totalQuantity}"/> -
+                    <input name="totalQuantityTo" type="text" maxlength="4" style="width:34px" value="${offer.totalQuantityTo}"/>
+                    <select name="totalQuantityUnit">
+                        <c:forEach var="unitEntry" items="${units}">
+                        <c:choose>
+                            <c:when test="${offer.totalQuantityUnit == unitEntry.key}">
+                                <option value="${unitEntry.key}" selected="selected">${unitEntry.value}</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="${unitEntry.key}">${unitEntry.value}</option>
+                            </c:otherwise>
+                        </c:choose>
+                        </c:forEach>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="unitQuantity">unitQuantity:</label></td>
+                <td><input id="unitQuantity" name="unitQuantity" type="text" maxlength="4" style="width:34px" value="${offer.unitQuantity}"/> -
+                    <input name="unitQuantityTo" type="text" maxlength="4" style="width:34px" value="${offer.unitQuantityTo}"/>
+                    <select name="unitQuantityUnit">
+                        <c:forEach var="unitEntry" items="${units}">
+                        <c:choose>
+                            <c:when test="${offer.unitQuantityUnit == unitEntry.key}">
+                                <option value="${unitEntry.key}" selected="selected">${unitEntry.value}</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="${unitEntry.key}">${unitEntry.value}</option>
+                            </c:otherwise>
+                        </c:choose>
+                        </c:forEach>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="number">number:</label></td>
+                <td><input id="number" name="number" type="text" maxlength="3" style="width:26px" value="${offer.number}"/></td>
+            </tr>
+            <tr>
+                <td><label for="type">type:</label></td>
+                <td><select id="type" name="type">
+                        <c:forEach var="typeEntry" items="${types}">
+                        <c:choose>
+                            <c:when test="${offer.type == typeEntry.key}">
+                                <option value="${typeEntry.key}" selected="selected">${typeEntry.value}</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="${typeEntry.key}">${typeEntry.value}</option>
+                            </c:otherwise>
+                        </c:choose>
+                        </c:forEach>
+                    </select></td>
+            </tr>
+            <tr>
+                <td><label for="priceE2">priceE2:</label></td>
+                <td><input id="priceE2" name="priceE2" type="text" style="width:50px" value="${offer.priceE2}"/></td>
+            </tr>
+            <tr>
+                <td>rating:</td>
+                <td>${offer.rating}</td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Save Offer"/></td>
+            </tr>
+        </table>
+    </form>
+    </body>
+    </html>
+</jsp:root>

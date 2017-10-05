@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0">
+    <xs:annotation>
+        <xs:appinfo>
+            <jaxb:bindings>
+                <jaxb:globalBindings>
+                    <xjc:javaType name="javax.xml.datatype.XMLGregorianCalendar" xmlType="xs:date"
+                                  adapter="com.konzoomer.KapowDateAdapter"/>
+                </jaxb:globalBindings>
+            </jaxb:bindings>
+        </xs:appinfo>
+    </xs:annotation>
+    <xs:element name="objects">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="StoreType" name="Store" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element type="LocationType" name="Location" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="StoreType">
+        <xs:sequence>
+            <xs:element name="chainID" type="xs:byte"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="streetName" type="xs:string"/>
+            <xs:element name="streetBuildingIdentifier" type="xs:string"/>
+            <xs:element name="postCodeIdentifier" type="xs:string"/>
+            <xs:element name="districtName" type="xs:string"/>
+            <xs:element name="districtSubDivisionIdentifier" type="xs:string"/>
+            <xs:element name="contactPerson" type="xs:string"/>
+            <xs:element name="telephone" type="xs:string"/>
+            <xs:element name="telefax" type="xs:string"/>
+            <xs:element name="email" type="xs:string"/>
+            <xs:element name="website" type="xs:string"/>
+            <xs:element name="latitude" type="xs:double" default="0"/>
+            <xs:element name="longitude" type="xs:double" default="0"/>
+            <xs:element name="mondayOpen" type="xs:date"/>
+            <xs:element name="mondayClose" type="xs:date"/>
+            <xs:element name="tuesdayOpen" type="xs:date"/>
+            <xs:element name="tuesdayClose" type="xs:date"/>
+            <xs:element name="wednesdayOpen" type="xs:date"/>
+            <xs:element name="wednesdayClose" type="xs:date"/>
+            <xs:element name="thursdayOpen" type="xs:date"/>
+            <xs:element name="thursdayClose" type="xs:date"/>
+            <xs:element name="fridayOpen" type="xs:date"/>
+            <xs:element name="fridayClose" type="xs:date"/>
+            <xs:element name="saturdayOpen" type="xs:date"/>
+            <xs:element name="saturdayClose" type="xs:date"/>
+            <xs:element name="sundayOpen" type="xs:date"/>
+            <xs:element name="sundayClose" type="xs:date"/>
+            <xs:element name="firstAndLastSundayInMonthOpen" type="xs:date"/>
+            <xs:element name="firstAndLastSundayInMonthClose" type="xs:date"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="LocationType">
+        <xs:sequence>
+            <xs:element name="streetName" type="xs:string"/>
+            <xs:element name="streetBuildingIdentifier" type="xs:string"/>
+            <xs:element name="postCodeIdentifier" type="xs:string"/>
+            <xs:element name="districtName" type="xs:string"/>
+            <xs:element name="districtSubDivisionIdentifier" type="xs:string"/>
+            <xs:element name="latitude" type="xs:double" default="0"/>
+            <xs:element name="longitude" type="xs:double" default="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

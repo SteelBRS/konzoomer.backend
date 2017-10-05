@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="cat_all">Alle</entry>
+    <entry key="cat_other">Andet</entry>
+    
+    <entry key="cat_bakery">Bageri</entry>
+    <entry key="cat_beef">Oksekød</entry>
+    <entry key="cat_beer">Øl</entry>
+    <entry key="cat_beverages">Drikkevarer</entry>
+    <entry key="cat_bread">Brød</entry>
+    <entry key="cat_bread_n_buns">Brød &amp; Boller</entry>
+    <entry key="cat_butter_n_fat">Smør &amp; Fedtstof</entry>
+    <entry key="cat_candy">Slik</entry>
+    <entry key="cat_candy_n_snacks">Slik &amp; Chips</entry>
+    <entry key="cat_cereals">Morgenmad</entry>
+    <entry key="cat_cheese">Ost</entry>
+    <entry key="cat_cleaning">Rengøring</entry>
+    <entry key="cat_coffee_tea_n_cocoa">Kaffe, Te &amp; Kakao</entry>
+    <entry key="cat_condiments_n_sauces">Krydderier &amp; Saucer</entry>
+    <entry key="cat_cooked_meats_n_salads">Pålæg &amp; Salater</entry>
+    <entry key="cat_cooked_meats_sliced">Pålæg (Skiver)</entry>
+    <entry key="cat_cooked_meats_whole_pieces">Pålæg (Hele stykker)</entry>
+    <entry key="cat_dairy">Mejeri</entry>
+    <entry key="cat_deodorants_n_roll_on">Deodoranter &amp; Roll On</entry>
+    <entry key="cat_dishwashers_n_washing_up">Opvask</entry>
+    <entry key="cat_dried_fruit_n_nuts">Tørret Frugt &amp; Nødder</entry>
+    <entry key="cat_eggs">Æg</entry>
+    <entry key="cat_fish_n_seafood">Fisk &amp; Skaldyr</entry>
+    <entry key="cat_frozen">Frost</entry>
+    <entry key="cat_fruits">Frugt</entry>
+    <entry key="cat_fruits_n_vegetables">Frugt &amp; Grønt</entry>
+    <entry key="cat_haircare">Hårpleje</entry>
+    <entry key="cat_health_n_beauty">Krop &amp; Velvære</entry>
+    <entry key="cat_household">Husholdning</entry>
+    <entry key="cat_ice_cream_n_desserts">Is &amp; Deserter</entry>
+    <entry key="cat_juice">Juice</entry>
+    <entry key="cat_laundry">Vask</entry>
+    <entry key="cat_lightbulbs_n_batteries">Elpærer &amp; Batterier</entry>
+    <entry key="cat_meals_n_pizza">Færdigretter &amp; Pizza</entry>
+    <entry key="cat_meat_fish_n_poultry">Kød, Fisk &amp; Fjerkræ</entry>
+    <entry key="cat_milk_n_yoghurt">Mælk &amp; Yoghurt</entry>
+    <entry key="cat_oral_care">Tandpleje</entry>
+    <entry key="cat_paper_n_bags">Papir &amp; Poser</entry>
+    <entry key="cat_pate">Leverpostej &amp; Paté</entry>
+    <entry key="cat_pork">Svinekød</entry>
+    <entry key="cat_poultry">Fjerkræ</entry>
+    <entry key="cat_processed_food">Kolonial</entry>
+    <entry key="cat_rye_bread">Rugbrød</entry>
+    <entry key="cat_salads">Salater</entry>
+    <entry key="cat_sausages">Pølser</entry>
+    <entry key="cat_shaving">Barberartikler</entry>
+    <entry key="cat_skincare">Hudpleje</entry>
+    <entry key="cat_snacks_n_dip">Snacks, Chips &amp; Dip</entry>
+    <entry key="cat_soft_drinks">Sodavand</entry>
+    <entry key="cat_soups">Supper</entry>
+    <entry key="cat_spirits">Spiritus</entry>
+    <entry key="cat_sugar_n_flour">Sukker &amp; Mel</entry>
+    <entry key="cat_tinned_food">Konserves</entry>
+    <entry key="cat_vegetables">Grøntsager</entry>
+    <entry key="cat_vegetables_n_french_fries">Grøntsager &amp; Pomfritter</entry>
+    <entry key="cat_water">Vand</entry>
+    <entry key="cat_wine">Vin</entry>
+</properties>

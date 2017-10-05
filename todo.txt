@@ -1,0 +1,13 @@
+
+StoresAldiDK.robot
+    * Harvest german stores
+    * Incorrectly harvests name for "Idagårdsvej 7, 4200 Slagelse" og "Vejlegadebro 7, 4900 Nakskov"
+
+StoresCoopDK.robot
+    * Bad input (enter manually):
+        http://coop.dk/om+coop/vores+butikker+og+nettorvet/find+butik.aspx?id=24204 (Fakta)
+        http://coop.dk/om+coop/vores+butikker+og+nettorvet/find+butik.aspx?id=24210 (Fakta)
+
+Store:
+    * 135009 - streetName spelling error
+    

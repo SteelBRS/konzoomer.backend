@@ -1,0 +1,72 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: Torben Vesterager
+  Date: 15-12-2010
+  Time: 19:04:42
+-->
+<jsp:root
+        xmlns:utils="http://konzoomer.com/jsp/utils"
+        xmlns:jsp="http://java.sun.com/JSP/Page"
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+        xmlns="http://www.google.com/earth/kml/2"
+        version="2.0">
+    <jsp:directive.page import="com.konzoomer.repo.PMF"/>
+    <jsp:directive.page import="com.konzoomer.domain.Store"/>
+    <jsp:directive.page import="com.konzoomer.KMLUtil"/>
+    <jsp:directive.page import="com.konzoomer.Utils"/>
+    <jsp:directive.page import="java.util.logging.Logger"/>
+    <jsp:directive.page import="javax.jdo.PersistenceManager"/>
+    <jsp:output omit-xml-declaration="no"/>
+    <jsp:directive.page contentType="application/vnd.google-earth.kml+xml;charset=utf-8" pageEncoding="UTF-8"/>
+    <jsp:directive.page isELIgnored="false"/>
+    <jsp:useBean id="kmlUtil" class="com.konzoomer.KMLUtil" scope="request"/>
+    <jsp:scriptlet>
+        try {
+            Logger log = Logger.getLogger("kml.jspx");
+
+            Long storeID = Long.parseLong(request.getParameter("id"));
+            long clientLatitudeE12 = Long.parseLong(request.getParameter("latitudeE12"));
+            long clientLongitudeE12 = Long.parseLong(request.getParameter("longitudeE12"));
+            double clientLatitude = clientLatitudeE12 / 1E12;
+            double clientLongitude = clientLongitudeE12 / 1E12;
+            int radiusMeters = Integer.parseInt(request.getParameter("radiusMeters"));
+
+            PersistenceManager pm = PMF.get().getPersistenceManager();
+            Store store = pm.getObjectById(Store.class, storeID);
+            request.setAttribute("kmlUtil", new KMLUtil(store));
+
+            double distanceMeters = Utils.calculateDistance(clientLatitude, clientLongitude, store.getLatitude(), store.getLongitude());
+            log.warning("distanceMeters=" + distanceMeters);
+            if (distanceMeters > radiusMeters) {
+                // TODO something
+            }
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(e);
+        }
+    </jsp:scriptlet>
+    <kml>
+        <Document>
+            <Style id="${kmlUtil.chainID}">
+                <IconStyle>
+                    <Icon>
+                        <href>${kmlUtil.iconURL}</href>
+                    </Icon>
+                </IconStyle>
+            </Style>
+            <Placemark>
+                <name>${kmlUtil.name}</name>
+                <description>I dag: ${kmlUtil.openingHoursToday}</description>
+                <styleUrl>#${kmlUtil.chainID}</styleUrl>
+                <Point>
+                    <coordinates>${kmlUtil.longitude}, ${kmlUtil.latitude}, 0</coordinates>
+                </Point>
+                <address>
+                    ${kmlUtil.streetAndNumber}
+                    ${kmlUtil.districtSubDivision}
+                    ${kmlUtil.postCodeAndDistrict}
+                </address>
+                <phoneNumber>${kmlUtil.telephone}</phoneNumber>
+            </Placemark>
+        </Document>
+    </kml>
+</jsp:root>
